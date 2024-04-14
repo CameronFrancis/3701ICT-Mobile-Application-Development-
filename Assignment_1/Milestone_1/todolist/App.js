@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Button} from 'react-native';
 
 export default function App() {
   return (
@@ -7,11 +7,11 @@ export default function App() {
       <View style={styles.header}>
         <Text style={styles.title}>My Todo List</Text>
       </View>
-      <ScrollView style={styles.todoListContainer}>
+      <View style={styles.todoListContainer}>
         <Text style={styles.todoItem}>Buy Milk</Text>
         <Text style={styles.todoItem}>Buy Eggs</Text>
         <Text style={styles.todoItem}>Buy Bread</Text>
-      </ScrollView>
+      </View>
       <View style={styles.footer}>
         <Button title="Add New Todo" onPress={() => {}} />
       </View>
