@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Ionicons';  
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -13,12 +13,10 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.todoItem}>Buy Eggs</Text>
         <Text style={styles.todoItem}>Buy Bread</Text>
       </View>
-      <View style={styles.footer}>
-        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddTodo')}>
-          <Ionicons name="add-circle-outline" size={24} color="black" />
-          <Text style={styles.addButtonText}>Add New Todo</Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddTodo')}>
+        <Icon name="add-circle-outline" size={24} color="white" style={styles.icon} />
+        <Text style={styles.addButtonText}>Add New Todo</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
@@ -54,21 +52,24 @@ const styles = StyleSheet.create({
     color: 'black',
     width: '90%',
   },
-  footer: {
-    width: '100%',
-    padding: 10,
-    borderTopWidth: 0,
-    position: 'absolute',
-    bottom: 0,
-  },
   addButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'lightblue', 
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',  
+    justifyContent: 'center',  
+    flexDirection: 'row',  
+    width: '90%',  
+    alignSelf: 'center', 
+    marginBottom: 20,
   },
   addButtonText: {
-    marginLeft: 10,
     fontSize: 18,
+    marginLeft: 10,  
+  },
+  icon: {
+    color: 'black',
   }
 });
 
