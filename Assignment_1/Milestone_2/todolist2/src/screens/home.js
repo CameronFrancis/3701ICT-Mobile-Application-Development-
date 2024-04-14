@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const HomeScreen = ({ navigation }) => {
   return (
@@ -13,7 +14,10 @@ const HomeScreen = ({ navigation }) => {
         <Text style={styles.todoItem}>Buy Bread</Text>
       </View>
       <View style={styles.footer}>
-        <Button title="Add New Todo" onPress={() => navigation.navigate('AddTodo')} />
+        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddTodo')}>
+          <Ionicons name="add-circle-outline" size={24} color="black" />
+          <Text style={styles.addButtonText}>Add New Todo</Text>
+        </TouchableOpacity>
       </View>
     </SafeAreaView>
   );
@@ -57,6 +61,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
   },
+  addButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  addButtonText: {
+    marginLeft: 10,
+    fontSize: 18,
+  }
 });
 
 export default HomeScreen;
