@@ -1,25 +1,30 @@
 import React from 'react';
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Pressable } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';  
 
 const HomeScreen = ({ navigation }) => {
-  return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.title}>My Todo List</Text>
-      </View>
-      <View style={styles.todoListContainer}>
-        <Text style={styles.todoItem}>Buy Milk</Text>
-        <Text style={styles.todoItem}>Buy Eggs</Text>
-        <Text style={styles.todoItem}>Buy Bread</Text>
-      </View>
-      <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddTodo')}>
-        <Icon name="add-circle-outline" size={24} color="white" style={styles.icon} />
-        <Text style={styles.addButtonText}>Add New Todo</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
-  );
-};
+    return (
+      <SafeAreaView style={styles.container}>
+        <View style={styles.header}>
+          <Text style={styles.title}>My Todo List</Text>
+        </View>
+        <View style={styles.todoListContainer}>
+          <Text style={styles.todoItem}>Buy Milk</Text>
+          <Text style={styles.todoItem}>Buy Eggs</Text>
+          <Text style={styles.todoItem}>Buy Bread</Text>
+        </View>
+        <Pressable style={({ pressed }) => [
+            styles.addButton,
+            pressed ? styles.buttonPressed : null 
+          ]}
+          onPress={() => navigation.navigate('AddTodo')}
+        >
+          <Icon name="add-circle-outline" size={24} color="black" />
+          <Text style={styles.addButtonText}>Add New Todo</Text>
+        </Pressable>
+      </SafeAreaView>
+    );
+  };
 
 const styles = StyleSheet.create({
   container: {
