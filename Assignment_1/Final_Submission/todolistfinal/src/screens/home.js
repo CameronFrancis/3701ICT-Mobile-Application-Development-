@@ -58,16 +58,22 @@ const HomeScreen = ({ navigation }) => {
           <Pressable onPress={() => toggleTodo(item.id)} style={styles.todoItem}>
             <Text style={{ color: item.expanded ? 'black' : 'grey' }}>{item.title}</Text>
             {item.expanded && (
-              <View>
+              <View style={styles.buttonContainer}>
                 <Text>{item.description}</Text>
-                {!item.finished && (
-                  <Pressable onPress={() => markAsFinished(item.id)}>
-                    <Icon name="checkmark-circle-outline" size={24} color="green" />
+                {!item.finished ? (
+                  <View style={styles.buttonGroup}>
+                    <Pressable onPress={() => markAsFinished(item.id)} style={styles.leftButton}>
+                      <Icon name="checkmark-circle-outline" size={24} color="green" />
+                    </Pressable>
+                    <Pressable onPress={() => deleteTodo(item.id)} style={styles.rightButton}>
+                      <Icon name="trash-bin-outline" size={24} color="red" />
+                    </Pressable>
+                  </View>
+                ) : (
+                  <Pressable onPress={() => deleteTodo(item.id)} style={styles.centerButton}>
+                    <Icon name="trash-bin-outline" size={24} color="red" />
                   </Pressable>
                 )}
-                <Pressable onPress={() => deleteTodo(item.id)}>
-                  <Icon name="trash-bin-outline" size={24} color="red" />
-                </Pressable>
               </View>
             )}
           </Pressable>
@@ -82,56 +88,72 @@ const HomeScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-    },
-    header: {
-      width: '100%',
-      borderBottomColor: 'black',
-      borderBottomWidth: 1,
-      alignItems: 'center',
-      padding: 10,
-    },
-    title: {
-      fontSize: 24,
-      fontWeight: 'bold',
-    },
-    todoListContainer: {
-      flex: 1,
-      width: '100%',
-    },
-    todoItem: {
-      backgroundColor: 'lightblue',
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 10,
-      marginLeft: '5%',
-      marginRight: '5%',
-      textAlign: 'center',
-      color: 'black',
-      width: '90%',
-    },
-    addButton: {
-      backgroundColor: 'lightblue', 
-      padding: 10,
-      borderRadius: 5,
-      marginTop: 10,
-      alignItems: 'center',  
-      justifyContent: 'center',  
-      flexDirection: 'row',  
-      width: '90%',  
-      alignSelf: 'center', 
-      marginBottom: 20,
-    },
-    addButtonText: {
-      fontSize: 18,
-      marginLeft: 10,  
-    },
-    icon: {
-      color: 'black',
-    }
-  });
-  
-  export default HomeScreen;
-  
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+  },
+  header: {
+    width: '100%',
+    borderBottomColor: 'black',
+    borderBottomWidth: 1,
+    alignItems: 'center',
+    padding: 10,
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  buttonContainer: {
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  buttonGroup: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  leftButton: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  rightButton: {
+    flex: 1,
+    alignItems: 'flex-end',
+  },
+  centerButton: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  todoItem: {
+    backgroundColor: 'lightblue',
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: '5%',
+    marginRight: '5%',
+    textAlign: 'center',
+    color: 'black',
+    width: '90%',
+  },
+  addButton: {
+    backgroundColor: 'lightblue', 
+    padding: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    alignItems: 'center',  
+    justifyContent: 'center',  
+    flexDirection: 'row',  
+    width: '90%',  
+    alignSelf: 'center', 
+    marginBottom: 20,
+  },
+  addButtonText: {
+    fontSize: 18,
+    marginLeft: 10,  
+  },
+  icon: {
+    color: 'black',
+  }
+});
+
+export default HomeScreen;
