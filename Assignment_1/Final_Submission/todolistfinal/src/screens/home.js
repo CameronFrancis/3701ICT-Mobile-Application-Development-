@@ -2,18 +2,21 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Pressable, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({ navigation }) => {
   const [todos, setTodos] = useState([]);
 
-  useEffect(() => {
-    const loadTodos = async () => {
-      const storedTodos = await AsyncStorage.getItem('todos');
-      if (storedTodos) setTodos(JSON.parse(storedTodos));
-    };
+  useFocusEffect(
+    React.useCallback(() => {
+      const loadTodos = async () => {
+        const storedTodos = await AsyncStorage.getItem('todos');
+        if (storedTodos) setTodos(JSON.parse(storedTodos));
+      };
 
-    loadTodos();
-  }, []);
+      loadTodos();
+    }, [])
+  );
 
   const toggleTodo = async (id) => {
     const newTodos = todos.map(todo => {
@@ -77,6 +80,7 @@ const HomeScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
+
 const styles = StyleSheet.create({
     container: {
       flex: 1,
