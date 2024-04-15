@@ -28,8 +28,3 @@ _Description: This screenshot of the GitHub commit history shows the development
 Here is the link to the screen recording video of the "My Todo List" app:
 [Video Link](#)
 _Description: The video, not exceeding 5 minutes, demonstrates all functionalities of the completed app. It includes explanations of the code structure and the logic behind key functionalities. The video is uploaded to an online platform and set to unlisted to ensure accessibility._
-
-## Additional Notes
-- Make sure to replace all placeholders with the actual data and links.
-- Test all links, especially the video link, before submitting the document to ensure they are accessible to the tutor.
-- Include any additional observations or notes that may be helpful for the understanding of the project.
