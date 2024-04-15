@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Pressable, FlatList } from 'react-native';
+import { View, Text, StyleSheet, SafeAreaView, Pressable, FlatList, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -26,6 +26,23 @@ const HomeScreen = ({ navigation }) => {
     await AsyncStorage.setItem('todos', JSON.stringify(newTodos));
   };
 
+  const markAsFinished = async (id) => {
+    const newTodos = todos.map(todo => {
+      if (todo.id === id) {
+        return { ...todo, finished: true };
+      }
+      return todo;
+    });
+    setTodos(newTodos);
+    await AsyncStorage.setItem('todos', JSON.stringify(newTodos));
+  };
+
+  const deleteTodo = async (id) => {
+    const newTodos = todos.filter(todo => todo.id !== id);
+    setTodos(newTodos);
+    await AsyncStorage.setItem('todos', JSON.stringify(newTodos));
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -37,7 +54,19 @@ const HomeScreen = ({ navigation }) => {
         renderItem={({ item }) => (
           <Pressable onPress={() => toggleTodo(item.id)} style={styles.todoItem}>
             <Text style={{ color: item.expanded ? 'black' : 'grey' }}>{item.title}</Text>
-            {item.expanded && <Text>{item.description}</Text>}
+            {item.expanded && (
+              <View>
+                <Text>{item.description}</Text>
+                {!item.finished && (
+                  <Pressable onPress={() => markAsFinished(item.id)}>
+                    <Icon name="checkmark-circle-outline" size={24} color="green" />
+                  </Pressable>
+                )}
+                <Pressable onPress={() => deleteTodo(item.id)}>
+                  <Icon name="trash-bin-outline" size={24} color="red" />
+                </Pressable>
+              </View>
+            )}
           </Pressable>
         )}
       />

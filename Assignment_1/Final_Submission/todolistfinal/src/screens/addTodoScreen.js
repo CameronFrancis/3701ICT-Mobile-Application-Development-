@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Pressable, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Pressable, Alert, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -9,18 +9,18 @@ const AddTodoScreen = ({ navigation }) => {
 
   const saveTodo = async () => {
     if (title.trim() === '' || description.trim() === '') {
-      alert('Both fields are required.');
-      return;
+      return;  // Skip saving if any field is empty
     }
 
-    const newTodo = { id: Date.now(), title, description, expanded: false };
+    const newTodo = { id: Date.now(), title, description, expanded: false, finished: false };
     const storedTodos = await AsyncStorage.getItem('todos');
     const todos = storedTodos ? JSON.parse(storedTodos) : [];
     todos.push(newTodo);
     await AsyncStorage.setItem('todos', JSON.stringify(todos));
+
+    Alert.alert("Todo Added Successfully");  // Show success message
     setTitle('');
     setDescription('');
-    navigation.goBack();
   };
 
   return (
@@ -45,9 +45,14 @@ const AddTodoScreen = ({ navigation }) => {
         <Icon name="save-outline" size={24} color="black" />
         <Text style={styles.buttonText}>Save</Text>
       </Pressable>
+      <Pressable style={styles.button} onPress={() => navigation.goBack()}>
+        <Text style={styles.buttonText}>Back</Text>
+      </Pressable>
     </View>
   );
 };
+
+
 
 const styles = StyleSheet.create({
     container: {
