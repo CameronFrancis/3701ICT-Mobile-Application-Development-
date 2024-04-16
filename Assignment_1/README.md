@@ -17,7 +17,7 @@ _Description: This screenshot shows the Home screen of the app, where all todos 
 _Description: This screenshot captures the Add New Todo screen. It includes elements like input fields for the title and description, showcasing the input validation functionality where inputs cannot be empty._
 
 ### Expanded Todo View with Control Panel Actions
-![Expanded Todo View](https://example.com/path/to/todolistfinal%20-%20homescreen%20expanding%20todo.jfif)
+![Expanded Todo View](https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20expanding%20todo.jfif)
 _Description: Here, the screenshot demonstrates a todo item in its expanded form. This view displays the todo's title, description, and a control panel with icons for marking the todo as finished or deleting it._
 
 ### Add New Todo Success Window
