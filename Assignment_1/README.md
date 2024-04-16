@@ -9,11 +9,11 @@ This section includes screenshots that demonstrate each key functionality of the
 
 ### Home Screen with Dynamic Listing of Todos
 <img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20dynamic%20todo.jfif" height="400px" alt="Dynamic List of Todos">
-This screenshot shows the Home screen of the app, where all todos are listed dynamically. It highlights how todos are displayed and organized for easy access.
+This screenshot shows the Home screen of the app, where all todos are listed dynamically.
 
 ### Add New Todo Screen with Input Validation
 <img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20add%20new%20todo.jfif" height="400px" alt="Add New Todo">
-This screenshot captures the Add New Todo screen. It includes elements like input fields for the title and description, showcasing the input validation functionality where inputs cannot be empty.
+This screenshot captures the Add New Todo screen. It includes input fields for the title and description, both fields having input validation functionality where inputs cannot be empty.
 
 ### Expanded Todo View with Control Panel Actions
 <img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20expanding%20todo.jfif" height="400px" alt="Expanded Todo View">
@@ -24,8 +24,8 @@ Here, the screenshot demonstrates a todo item in its expanded form. This view di
 This screenshot displays the success notification window after a new todo has been successfully added. It confirms to the user that their action was successful.
 
 ### GitHub Commit History
-![GitHub Commit History](https://example.com/path/to/todolistfinal%20-%20add%20new%20todo%20success%20window.jfif)
-This screenshot of the GitHub commit history shows the development progress of the project, detailing the sequence and description of commits made over time.
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20commit%20history.png" height="400px" alt="Final Submission Git Commit History">
+This screenshot of the GitHub commit history shows the development progress of the final submission.
 
 ## Screen Recording Video Link
 Here is the link to the screen recording video of the "My Todo List" app:
