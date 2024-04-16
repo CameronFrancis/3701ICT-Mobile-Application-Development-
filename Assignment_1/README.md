@@ -9,19 +9,19 @@ Please find the link to the GitHub repository for the "My Todo List" app:
 This section includes screenshots that demonstrate each key functionality of the application. Each screenshot is accompanied by a brief description of what it illustrates.
 
 ### Home Screen with Dynamic Listing of Todos
-![Home Screen](https://example.com/path/to/todolistfinal%20-%20homescreen%20dynamic%20todo.jfif)
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20dynamic%20todo.jfif" height="400px" alt="Dynamic List of Todos">
 _Description: This screenshot shows the Home screen of the app, where all todos are listed dynamically. It highlights how todos are displayed and organized for easy access._
 
 ### Add New Todo Screen with Input Validation
-![Add New Todo Screen](https://example.com/path/to/todolistfinal%20-%20add%20new%20todo.jfif)
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20add%20new%20todo.jfif" height="400px" alt="Add New Todo">
 _Description: This screenshot captures the Add New Todo screen. It includes elements like input fields for the title and description, showcasing the input validation functionality where inputs cannot be empty._
 
 ### Expanded Todo View with Control Panel Actions
-<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20expanding%20todo.jfif" height="600px" alt="Expanded Todo View">
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20homescreen%20expanding%20todo.jfif" height="400px" alt="Expanded Todo View">
 _Description: Here, the screenshot demonstrates a todo item in its expanded form. This view displays the todo's title, description, and a control panel with icons for marking the todo as finished or deleting it._
 
 ### Add New Todo Success Window
-![Add New Todo Success Window](https://example.com/path/to/todolistfinal%20-%20add%20new%20todo%20success%20window.jfif)
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistfinal%20-%20add%20new%20todo%20success%20window.jfif" height="400px" alt="Success Window">
 _Description: This screenshot displays the success notification window after a new todo has been successfully added. It confirms to the user that their action was successful._
 
 ### GitHub Commit History
