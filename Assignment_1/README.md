@@ -31,4 +31,8 @@ _Description: This screenshot of the GitHub commit history shows the development
 ## Screen Recording Video Link
 Here is the link to the screen recording video of the "My Todo List" app:
 [Video Link](#)
+<<<<<<< HEAD
 _Description: The video demonstrates all functionalities of the completed app. It includes explanations of the code structure and the logic behind key functionalities. The video is uploaded to an online platform and set to unlisted to ensure accessibility._
+=======
+_Description: The video, not exceeding 5 minutes, demonstrates all functionalities of the completed app. It includes explanations of the code structure and the logic behind key functionalities. The video is uploaded to an online platform and set to unlisted to ensure accessibility._
+>>>>>>> b4ff7bf090cc34725426ad65bd509bb1098dbb42
