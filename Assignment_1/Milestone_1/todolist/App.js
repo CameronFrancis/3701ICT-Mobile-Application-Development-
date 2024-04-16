@@ -1,9 +1,9 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button} from 'react-native';
+import React from 'react';
+import { View, Text, Button, StyleSheet, SafeAreaView } from 'react-native';
 
-export default function App() {
+const HomeScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>My Todo List</Text>
       </View>
@@ -13,11 +13,11 @@ export default function App() {
         <Text style={styles.todoItem}>Buy Bread</Text>
       </View>
       <View style={styles.footer}>
-        <Button title="Add New Todo" onPress={() => {}} />
+        <Button title="Add New Todo" onPress={() => navigation.navigate('AddTodo')} />
       </View>
-    </View>
+    </SafeAreaView>
   );
-}
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   todoListContainer: {
     flex: 1,
-    width: '100%', 
+    width: '100%',
   },
   todoItem: {
     backgroundColor: 'lightblue',
@@ -53,8 +53,10 @@ const styles = StyleSheet.create({
   footer: {
     width: '100%',
     padding: 10,
-    borderTopWidth: 0, 
-    position: 'absolute', 
+    borderTopWidth: 0,
+    position: 'absolute',
     bottom: 0,
   },
 });
+
+export default HomeScreen;
