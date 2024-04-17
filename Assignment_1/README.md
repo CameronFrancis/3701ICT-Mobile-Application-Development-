@@ -31,6 +31,8 @@ This screenshot of the GitHub commit history shows the development progress of t
 
 Here is the link to the screen recording video of the "My Todo List" app:
 
-[![Watch the video](https://img.youtube.com/vi/eIXqv38Hx9M/maxresdefault.jpg)](https://www.youtube.com/watch?v=eIXqv38Hx9M)
+<a href="https://www.youtube.com/watch?v=eIXqv38Hx9M">
+    <img src="https://img.youtube.com/vi/eIXqv38Hx9M/maxresdefault.jpg" alt="Watch the video" height="400">
+</a>
 
 Description: The video demonstrates all functionalities of the completed app. The video is uploaded to an online platform and set to unlisted to ensure accessibility.
