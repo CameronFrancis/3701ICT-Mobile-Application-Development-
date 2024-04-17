@@ -28,6 +28,9 @@ This screenshot displays the success notification window after a new todo has be
 This screenshot of the GitHub commit history shows the development progress of the final submission.
 
 ## Screen Recording Video Link
+
 Here is the link to the screen recording video of the "My Todo List" app:
-[Video Link](#)
-_Description: The video demonstrates all functionalities of the completed app. It includes explanations of the code structure and the logic behind key functionalities. The video is uploaded to an online platform and set to unlisted to ensure accessibility._
+
+[![Watch the video](https://img.youtube.com/vi/eIXqv38Hx9M/maxresdefault.jpg)](https://www.youtube.com/watch?v=eIXqv38Hx9M)
+
+Description: The video demonstrates all functionalities of the completed app. The video is uploaded to an online platform and set to unlisted to ensure accessibility.
