@@ -35,4 +35,4 @@ Here is the link to the screen recording video of the "My Todo List" app:
     <img src="https://img.youtube.com/vi/eIXqv38Hx9M/maxresdefault.jpg" alt="Watch the video" height="400">
 </a>
 
-Description: The video demonstrates all functionalities of the completed app. The video is uploaded to an online platform and set to unlisted to ensure accessibility.
+Description: The video demonstrates all functionalities of the completed app. The video is uploaded to an Youtube and set to unlisted to ensure accessibility.
