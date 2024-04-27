@@ -30,6 +30,6 @@ _Description: The "Add New Todo" screen layout, showcasing the interface design 
 
 The screenshot of the GitHub commit history provided below highlights the specific commits relevant to Milestone 2.
 
-<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistmilestone2%20-%20add%20new%20todo%20screen%20with%20navigation.jfif" height="400px" alt="Commit History for Milestone 2">
+<img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistmilestone2%20-%20commit%20history.png" height="400px" alt="Commit History for Milestone 2">
 
 _Description: GitHub commit history showing the commits and the "milestone2" tag related to the completion of Milestone 2._
