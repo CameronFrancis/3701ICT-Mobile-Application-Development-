@@ -2,7 +2,7 @@
 
 ## Submission Guidelines for Milestone 1
 
-This document outlines the key submissions for Milestone 1 of the "My Todo List" app development. Please ensure all requirements are met as per the guidelines provided.
+This document outlines the key submissions for Milestone 1 of the "My Todo List" app development.
 
 ## GitHub Project URL
 
@@ -10,7 +10,7 @@ This document outlines the key submissions for Milestone 1 of the "My Todo List"
 
 ## App Screenshot
 
-Below is the screenshot of the main page of the app as displayed in Expo on my android device. This screen captures the hardcoded list of to-dos and the "Add New Todo" button which are essential features for Milestone 1.
+Below is the screenshot of the main page of the app as displayed in Expo on my android device. This screen captures the hardcoded list of to-dos and the "Add New Todo" button.
 
 <img src="https://github.com/CameronFrancis/3701ICT-Mobile-Application-Development-/blob/main/images/todolistmilestone1%20-%20home%20screen%20with%20todo%20items.jfif" height="400px" alt="Home Screen">
 
