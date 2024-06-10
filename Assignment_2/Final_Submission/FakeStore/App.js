@@ -12,6 +12,8 @@ import CategoryScreen from './src/screens/CategoryScreen';
 import ProductListScreen from './src/screens/ProductListScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import ShoppingCartScreen from './src/screens/ShoppingCartScreen';
+import SignInScreen from './src/screens/SignInScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -68,6 +70,14 @@ const App = () => {
             name="Splash" 
             component={SplashScreen} 
             options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="SignIn" 
+            component={SignInScreen} 
+          />
+          <Stack.Screen 
+            name="SignUp" 
+            component={SignUpScreen} 
           />
           <Stack.Screen 
             name="Home" 
