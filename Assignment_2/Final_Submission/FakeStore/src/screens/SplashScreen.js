@@ -1,15 +1,21 @@
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Button } from 'react-native';
+import { View, Text, StyleSheet, Image } from 'react-native';
+import { useSelector } from 'react-redux';
 
 const SplashScreen = ({ navigation }) => {
+  const user = useSelector(state => state.auth.user);
+
   useEffect(() => {
     const timer = setTimeout(() => {
-      // Navigate to the "Home" navigator and then to the "Products" screen
-      navigation.navigate('Home', { screen: 'Products' });
-    }, 3000);  // After 3 seconds, navigate to the Products screen
+      if (user) {
+        navigation.replace('Home');
+      } else {
+        navigation.replace('SignIn');
+      }
+    }, 3000);  // After 3 seconds, navigate to the appropriate screen
 
     return () => clearTimeout(timer); // Clean up the timer
-  }, [navigation]);
+  }, [navigation, user]);
 
   return (
     <View style={styles.container}>
@@ -18,10 +24,6 @@ const SplashScreen = ({ navigation }) => {
         style={styles.logo}
       />
       <Text style={styles.title}>Fake Store</Text>
-      <Button
-        title="Go to Products"
-        onPress={() => navigation.navigate('Home', { screen: 'Products' })}
-      />
     </View>
   );
 };

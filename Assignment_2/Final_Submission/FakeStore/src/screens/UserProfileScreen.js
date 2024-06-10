@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+// src/screens/UserProfileScreen.js
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, updateUser } from '../features/AuthSlice';
@@ -6,12 +7,20 @@ import { logout, updateUser } from '../features/AuthSlice';
 const UserProfileScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
-  const [name, setName] = useState(user.name);
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
+
+  useEffect(() => {
+    if (!user) {
+      navigation.navigate('SignIn');
+    } else {
+      setName(user.name);
+    }
+  }, [user]);
 
   const handleUpdate = async () => {
     try {
-      const response = await fetch('http://localhost:3000/users/update', {
+      const response = await fetch('http://192.168.1.205:3000/users/update', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -36,8 +45,15 @@ const UserProfileScreen = ({ navigation }) => {
 
   const handleLogout = () => {
     dispatch(logout());
-    navigation.navigate('SignIn');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'SignIn' }],
+    });
   };
+
+  if (!user) {
+    return null; // or a loading spinner, or redirect to sign in
+  }
 
   return (
     <View style={styles.container}>

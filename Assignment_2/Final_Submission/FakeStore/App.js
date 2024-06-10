@@ -1,23 +1,28 @@
+// App.js
 import React from 'react';
+import { Provider } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider, useSelector } from 'react-redux';
-import { store } from './src/store/store';
+import store from './src/store/store';
+import { useSelector } from 'react-redux'; // Ensure this is only imported once
 
+// Importing screens
 import SplashScreen from './src/screens/SplashScreen';
+import SignInScreen from './src/screens/SignInScreen';
+import SignUpScreen from './src/screens/SignUpScreen';
 import CategoryScreen from './src/screens/CategoryScreen';
 import ProductListScreen from './src/screens/ProductListScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import ShoppingCartScreen from './src/screens/ShoppingCartScreen';
-import SignInScreen from './src/screens/SignInScreen'; 
-import SignUpScreen from './src/screens/SignUpScreen'; 
 import UserProfileScreen from './src/screens/UserProfileScreen';
 
+// Stack Navigator
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
 
+// Products Navigator
 function ProductsNavigator() {
   return (
     <Stack.Navigator>
@@ -28,8 +33,9 @@ function ProductsNavigator() {
   );
 }
 
+// Bottom Tab Navigator
 function MyTabs() {
-  const totalQuantity = useSelector(state => state.cart.totalQuantity);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
 
   return (
     <Tab.Navigator
@@ -40,8 +46,8 @@ function MyTabs() {
             iconName = focused ? 'list' : 'list-outline';
           } else if (route.name === 'ShoppingCart') {
             iconName = focused ? 'cart' : 'cart-outline';
-          } else if (route.name === 'UserProfile') { // Add this line
-            iconName = focused ? 'person' : 'person-outline'; // Use person icon
+          } else if (route.name === 'UserProfile') {
+            iconName = focused ? 'person' : 'person-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -59,15 +65,15 @@ function MyTabs() {
         component={ShoppingCartScreen} 
         options={{ tabBarBadge: totalQuantity }} 
       />
-      <Tab.Screen // Add this block
+      <Tab.Screen 
         name="UserProfile" 
         component={UserProfileScreen} 
-        options={{ headerShown: false, title: 'Profile' }} 
       />
     </Tab.Navigator>
   );
 }
 
+// App Component
 const App = () => {
   return (
     <Provider store={store}>
@@ -79,19 +85,17 @@ const App = () => {
             options={{ headerShown: false }} 
           />
           <Stack.Screen 
+            name="Main" 
+            component={MyTabs} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
             name="SignIn" 
             component={SignInScreen} 
-            options={{ headerShown: false }} 
           />
           <Stack.Screen 
             name="SignUp" 
             component={SignUpScreen} 
-            options={{ headerShown: false }} 
-          />
-          <Stack.Screen 
-            name="Home" 
-            component={MyTabs}
-            options={{ headerShown: false }} 
           />
         </Stack.Navigator>
       </NavigationContainer>

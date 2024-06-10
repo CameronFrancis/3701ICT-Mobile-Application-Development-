@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { login } from '../features/AuthSlice';
+import { setUser } from '../features/AuthSlice';
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -10,7 +10,7 @@ const SignInScreen = ({ navigation }) => {
 
   const handleSignIn = async () => {
     try {
-      const response = await fetch('http://localhost:3000/users/signin', {
+      const response = await fetch('http://192.168.1.205:3000/users/signin', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -20,10 +20,16 @@ const SignInScreen = ({ navigation }) => {
 
       const data = await response.json();
 
+      console.log('API response:', data); // Log the response data
+
       if (response.ok) {
-        dispatch(login({ email: data.email, token: data.token }));
+        dispatch(setUser({ user: data, token: data.token }));
+        console.log('User set in state:', data); // Log user state
         Alert.alert('Success', 'Signed in successfully');
-        navigation.navigate('Home');
+        navigation.reset({
+          index: 0,
+          routes: [{ name: 'Main' }],
+        });
       } else {
         Alert.alert('Error', data.message || 'Failed to sign in');
       }
