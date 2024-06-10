@@ -1,9 +1,10 @@
+// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { store } from './src/store/store';
 
 import SplashScreen from './src/screens/SplashScreen';
@@ -26,6 +27,8 @@ function ProductsNavigator() {
 }
 
 function MyTabs() {
+  const totalQuantity = useSelector(state => state.cart.totalQuantity);
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -42,8 +45,16 @@ function MyTabs() {
         tabBarInactiveTintColor: 'gray',
       })}
     >
-      <Tab.Screen name="ProductsNavigator" component={ProductsNavigator} options={{ headerShown: false, title: 'Products' }} />
-      <Tab.Screen name="ShoppingCart" component={ShoppingCartScreen} options={{ tabBarBadge: 3 }} />
+      <Tab.Screen 
+        name="ProductsNavigator" 
+        component={ProductsNavigator} 
+        options={{ headerShown: false, title: 'Products' }} 
+      />
+      <Tab.Screen 
+        name="ShoppingCart" 
+        component={ShoppingCartScreen} 
+        options={{ tabBarBadge: totalQuantity }} 
+      />
     </Tab.Navigator>
   );
 }
@@ -53,8 +64,16 @@ const App = () => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator initialRouteName="Splash">
-          <Stack.Screen name="Splash" component={SplashScreen} options={{ headerShown: false }} />
-          <Stack.Screen name="Home" component={MyTabs} options={{ headerShown: false }} />
+          <Stack.Screen 
+            name="Splash" 
+            component={SplashScreen} 
+            options={{ headerShown: false }} 
+          />
+          <Stack.Screen 
+            name="Home" 
+            component={MyTabs} 
+            options={{ headerShown: false }} 
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>

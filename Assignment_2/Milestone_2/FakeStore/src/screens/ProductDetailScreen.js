@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, Image, StyleSheet, ScrollView, Button, ActivityIndicator } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { addItemToCart } from '../features/CartSlice';
 
 const ProductDetailScreen = ({ route, navigation }) => {
   const { productId } = route.params;
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     fetchProduct();
@@ -20,6 +23,11 @@ const ProductDetailScreen = ({ route, navigation }) => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const addToCartHandler = () => {
+    dispatch(addItemToCart(product));
+    navigation.navigate('ShoppingCart');
   };
 
   if (loading) {
@@ -46,7 +54,7 @@ const ProductDetailScreen = ({ route, navigation }) => {
         <Text style={styles.title}>{product.title || 'No title'}</Text>
         <Text style={styles.price}>${product.price ? product.price.toFixed(2) : '0.00'}</Text>
         <Text style={styles.description}>{product.description || 'No description available'}</Text>
-        <Button title="Add to Shopping Cart" onPress={() => {}} />
+        <Button title="Add to Shopping Cart" onPress={addToCartHandler} />
       </View>
       <Button title="Back to Products" onPress={() => navigation.goBack()} />
     </ScrollView>
