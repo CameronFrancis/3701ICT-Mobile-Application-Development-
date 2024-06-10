@@ -17,6 +17,7 @@ import ProductListScreen from './src/screens/ProductListScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import ShoppingCartScreen from './src/screens/ShoppingCartScreen';
 import UserProfileScreen from './src/screens/UserProfileScreen';
+import MyOrdersScreen from './src/screens/MyOrdersScreen';
 
 // Stack Navigator
 const Stack = createNativeStackNavigator();
@@ -36,6 +37,8 @@ function ProductsNavigator() {
 // Bottom Tab Navigator
 function MyTabs() {
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const orders = useSelector((state) => state.orders);
+  console.log('Orders state in MyTabs:', orders); // Log orders state
 
   return (
     <Tab.Navigator
@@ -48,6 +51,8 @@ function MyTabs() {
             iconName = focused ? 'cart' : 'cart-outline';
           } else if (route.name === 'UserProfile') {
             iconName = focused ? 'person' : 'person-outline';
+          } else if (route.name === 'MyOrders') {
+            iconName = focused ? 'clipboard' : 'clipboard-outline';
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -64,6 +69,11 @@ function MyTabs() {
         name="ShoppingCart" 
         component={ShoppingCartScreen} 
         options={{ tabBarBadge: totalQuantity }} 
+      />
+      <Tab.Screen 
+        name="MyOrders" 
+        component={MyOrdersScreen} 
+        options={{ tabBarBadge: orders.new.length }} 
       />
       <Tab.Screen 
         name="UserProfile" 
