@@ -1,10 +1,9 @@
-// App.js
 import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider, useSelector } from 'react-redux'; // Import useSelector
+import { Provider, useSelector } from 'react-redux';
 import { store } from './src/store/store';
 
 import SplashScreen from './src/screens/SplashScreen';
@@ -12,8 +11,9 @@ import CategoryScreen from './src/screens/CategoryScreen';
 import ProductListScreen from './src/screens/ProductListScreen';
 import ProductDetailScreen from './src/screens/ProductDetailScreen';
 import ShoppingCartScreen from './src/screens/ShoppingCartScreen';
-import SignInScreen from './src/screens/SignInScreen';
-import SignUpScreen from './src/screens/SignUpScreen';
+import SignInScreen from './src/screens/SignInScreen'; 
+import SignUpScreen from './src/screens/SignUpScreen'; 
+import UserProfileScreen from './src/screens/UserProfileScreen';
 
 const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -40,6 +40,8 @@ function MyTabs() {
             iconName = focused ? 'list' : 'list-outline';
           } else if (route.name === 'ShoppingCart') {
             iconName = focused ? 'cart' : 'cart-outline';
+          } else if (route.name === 'UserProfile') { // Add this line
+            iconName = focused ? 'person' : 'person-outline'; // Use person icon
           }
           return <Ionicons name={iconName} size={size} color={color} />;
         },
@@ -56,6 +58,11 @@ function MyTabs() {
         name="ShoppingCart" 
         component={ShoppingCartScreen} 
         options={{ tabBarBadge: totalQuantity }} 
+      />
+      <Tab.Screen // Add this block
+        name="UserProfile" 
+        component={UserProfileScreen} 
+        options={{ headerShown: false, title: 'Profile' }} 
       />
     </Tab.Navigator>
   );
@@ -83,7 +90,7 @@ const App = () => {
           />
           <Stack.Screen 
             name="Home" 
-            component={MyTabs} 
+            component={MyTabs}
             options={{ headerShown: false }} 
           />
         </Stack.Navigator>
