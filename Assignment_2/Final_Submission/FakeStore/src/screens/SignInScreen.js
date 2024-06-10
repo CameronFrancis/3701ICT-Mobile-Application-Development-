@@ -1,32 +1,43 @@
 // src/screens/SignInScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { setUser } from '../features/AuthSlice';
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch();
 
   const handleSignIn = async () => {
     try {
-      const response = await fetch('http://localhost:3000/auth/login', {
+      const response = await fetch('http://localhost:3000/users/signin', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ email, password }),
       });
+
       const data = await response.json();
-      if (data.token) {
-        // Store the token and navigate to Profile
+
+      if (response.ok) {
+        // Store the token and navigate to the main screen
+        dispatch(setUser({ user: data, token: data.token }));
+        Alert.alert('Success', 'Signed in successfully');
+        navigation.navigate('Home');
       } else {
-        Alert.alert('Error', 'Wrong email or password');
+        Alert.alert('Error', data.message || 'Failed to sign in');
       }
     } catch (error) {
-      Alert.alert('Error', 'Something went wrong');
+      console.error('Failed to sign in:', error);
+      Alert.alert('Error', 'Failed to sign in');
     }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Sign in with your email and password</Text>
+      <Text style={styles.title}>Sign In</Text>
       <TextInput
         style={styles.input}
         placeholder="Email"
@@ -40,21 +51,30 @@ const SignInScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
-      <View style={styles.buttonContainer}>
-        <Button title="Clear" onPress={() => { setEmail(''); setPassword(''); }} />
-        <Button title="Sign In" onPress={handleSignIn} />
-      </View>
-      <Text style={styles.switchText} onPress={() => navigation.navigate('SignUp')}>Switch to: sign up</Text>
+      <Button title="Sign In" onPress={handleSignIn} />
+      <Button title="Go to Sign Up" onPress={() => navigation.navigate('SignUp')} />
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, justifyContent: 'center', padding: 16 },
-  title: { fontSize: 18, marginBottom: 16 },
-  input: { borderWidth: 1, marginBottom: 16, padding: 8, borderRadius: 4 },
-  buttonContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-  switchText: { marginTop: 16, color: 'blue', textAlign: 'center' },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    padding: 20,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  input: {
+    height: 40,
+    borderColor: 'gray',
+    borderWidth: 1,
+    marginBottom: 20,
+    paddingLeft: 10,
+  },
 });
 
 export default SignInScreen;

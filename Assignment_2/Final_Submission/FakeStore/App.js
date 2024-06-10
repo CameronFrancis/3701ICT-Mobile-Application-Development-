@@ -4,7 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useSelector } from 'react-redux'; // Import useSelector
 import { store } from './src/store/store';
 
 import SplashScreen from './src/screens/SplashScreen';
@@ -74,10 +74,12 @@ const App = () => {
           <Stack.Screen 
             name="SignIn" 
             component={SignInScreen} 
+            options={{ headerShown: false }} 
           />
           <Stack.Screen 
             name="SignUp" 
             component={SignUpScreen} 
+            options={{ headerShown: false }} 
           />
           <Stack.Screen 
             name="Home" 

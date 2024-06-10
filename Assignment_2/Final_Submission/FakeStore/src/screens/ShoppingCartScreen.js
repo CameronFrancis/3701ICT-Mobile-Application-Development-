@@ -1,46 +1,65 @@
-import React from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Image, StyleSheet, ActivityIndicator, Button, Alert } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
-import { removeItemFromCart } from '../features/CartSlice';
-import { Ionicons } from '@expo/vector-icons';
+import { fetchCart, updateCart, checkoutCart } from '../features/CartSlice';
 
-const ShoppingCartScreen = () => {
-  const cartItems = useSelector(state => state.cart.items);
+const ShoppingCartScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const cart = useSelector((state) => state.cart);
+  const [loading, setLoading] = useState(false);
 
-  const handleRemoveItem = (id) => {
-    dispatch(removeItemFromCart(id));
+  useEffect(() => {
+    dispatch(fetchCart());
+  }, [dispatch]);
+
+  const handleCheckout = async () => {
+    try {
+      setLoading(true);
+      await dispatch(checkoutCart());
+      Alert.alert('Success', 'Checkout successful');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to checkout');
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const calculateSubtotal = () => {
-    return cartItems.reduce((total, item) => total + item.price * item.quantity, 0).toFixed(2);
-  };
-
-  const renderCartItem = ({ item }) => (
-    <View style={styles.cartItem}>
+  const renderItem = ({ item }) => (
+    <View style={styles.item}>
       <Image source={{ uri: item.image }} style={styles.image} />
-      <View style={styles.infoContainer}>
+      <View style={styles.info}>
         <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.quantity}>Quantity: {item.quantity}</Text>
-        <Text style={styles.price}>${(item.price * item.quantity).toFixed(2)}</Text>
+        <Text style={styles.price}>${item.price.toFixed(2)}</Text>
+        <View style={styles.quantity}>
+          <Button title="-" onPress={() => dispatch(updateCart({ id: item.id, quantity: item.quantity - 1 }))} />
+          <Text style={styles.quantityText}>{item.quantity}</Text>
+          <Button title="+" onPress={() => dispatch(updateCart({ id: item.id, quantity: item.quantity + 1 }))} />
+        </View>
       </View>
-      <TouchableOpacity onPress={() => handleRemoveItem(item.id)} style={styles.removeButton}>
-        <Ionicons name="trash-bin" size={24} color="red" />
-      </TouchableOpacity>
     </View>
   );
 
   return (
     <View style={styles.container}>
-      <FlatList
-        data={cartItems}
-        renderItem={renderCartItem}
-        keyExtractor={(item) => item.id.toString()}
-        contentContainerStyle={styles.list}
-      />
-      <View style={styles.subtotalContainer}>
-        <Text style={styles.subtotalText}>Subtotal: ${calculateSubtotal()}</Text>
-      </View>
+      {loading ? (
+        <ActivityIndicator size="large" color="#0000ff" />
+      ) : (
+        <>
+          {cart.items.length === 0 ? (
+            <Text style={styles.empty}>Your Cart is Empty</Text>
+          ) : (
+            <>
+              <FlatList
+                data={cart.items}
+                renderItem={renderItem}
+                keyExtractor={(item) => item.id.toString()}
+              />
+              <Text style={styles.total}>Total: ${cart.total.toFixed(2)}</Text>
+              <Button title="Checkout" onPress={handleCheckout} />
+            </>
+          )}
+        </>
+      )}
     </View>
   );
 };
@@ -48,53 +67,49 @@ const ShoppingCartScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 10,
-    backgroundColor: '#fff',
+    padding: 20,
   },
-  list: {
-    paddingBottom: 20,
-  },
-  cartItem: {
+  item: {
     flexDirection: 'row',
-    alignItems: 'center',
+    padding: 10,
     marginBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-    paddingBottom: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 10,
   },
   image: {
-    width: 80,
-    height: 80,
+    width: 60,
+    height: 60,
     marginRight: 10,
   },
-  infoContainer: {
+  info: {
     flex: 1,
+    justifyContent: 'center',
   },
   title: {
     fontSize: 16,
     fontWeight: 'bold',
   },
-  quantity: {
-    fontSize: 14,
-    color: '#555',
-  },
   price: {
-    fontSize: 16,
+    fontSize: 14,
     color: 'green',
-    marginTop: 5,
   },
-  removeButton: {
-    padding: 5,
-  },
-  subtotalContainer: {
-    borderTopWidth: 1,
-    borderTopColor: '#ccc',
-    paddingTop: 10,
+  quantity: {
+    flexDirection: 'row',
     alignItems: 'center',
   },
-  subtotalText: {
+  quantityText: {
+    marginHorizontal: 10,
+  },
+  total: {
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center',
+    marginVertical: 20,
+  },
+  empty: {
+    fontSize: 18,
+    textAlign: 'center',
+    marginVertical: 20,
   },
 });
 
