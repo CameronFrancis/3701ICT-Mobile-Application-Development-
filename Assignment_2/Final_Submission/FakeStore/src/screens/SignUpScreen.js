@@ -52,8 +52,9 @@ const SignUpScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <Button title="Clear" onPress={() => { setName(''); setEmail(''); setPassword(''); }} />
       <Button title="Sign Up" onPress={handleSignUp} />
-      <Button title="Go to Sign In" onPress={() => navigation.navigate('SignIn')} />
+      <Button title="Switch to: sign in" onPress={() => navigation.navigate('SignIn')} />
     </View>
   );
 };
