@@ -1,8 +1,7 @@
-// src/screens/SignInScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { setUser } from '../features/AuthSlice';
+import { login } from '../features/AuthSlice';
 
 const SignInScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
@@ -22,8 +21,7 @@ const SignInScreen = ({ navigation }) => {
       const data = await response.json();
 
       if (response.ok) {
-        // Store the token and navigate to the main screen
-        dispatch(setUser({ user: data, token: data.token }));
+        dispatch(login({ email: data.email, token: data.token }));
         Alert.alert('Success', 'Signed in successfully');
         navigation.navigate('Home');
       } else {
@@ -51,8 +49,9 @@ const SignInScreen = ({ navigation }) => {
         onChangeText={setPassword}
         secureTextEntry
       />
+      <Button title="Clear" onPress={() => { setEmail(''); setPassword(''); }} />
       <Button title="Sign In" onPress={handleSignIn} />
-      <Button title="Go to Sign Up" onPress={() => navigation.navigate('SignUp')} />
+      <Button title="Switch to: sign up" onPress={() => navigation.navigate('SignUp')} />
     </View>
   );
 };
