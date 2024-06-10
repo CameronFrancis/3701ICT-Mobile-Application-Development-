@@ -1,4 +1,3 @@
-// src/screens/UserProfileScreen.js
 import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,11 +13,13 @@ const UserProfileScreen = ({ navigation }) => {
     if (!user) {
       navigation.navigate('SignIn');
     } else {
-      setName(user.name);
+      console.log('User found:', user); // Logging the user object
+      setName(user.user.name);
     }
   }, [user]);
 
   const handleUpdate = async () => {
+    console.log('Updating user with:', { name, password }); // Log update details
     try {
       const response = await fetch('http://192.168.1.205:3000/users/update', {
         method: 'POST',
@@ -30,6 +31,7 @@ const UserProfileScreen = ({ navigation }) => {
       });
 
       const data = await response.json();
+      console.log('Update response:', data); // Log the response
 
       if (response.ok) {
         dispatch(updateUser({ name }));
@@ -44,6 +46,7 @@ const UserProfileScreen = ({ navigation }) => {
   };
 
   const handleLogout = () => {
+    console.log('Logging out'); // Log logout action
     dispatch(logout());
     navigation.reset({
       index: 0,
@@ -58,7 +61,7 @@ const UserProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>User Profile</Text>
-      <Text style={styles.label}>Email: {user.email}</Text>
+      <Text style={styles.label}>Email: {user.user.email}</Text>
       <TextInput
         style={styles.input}
         placeholder="Name"

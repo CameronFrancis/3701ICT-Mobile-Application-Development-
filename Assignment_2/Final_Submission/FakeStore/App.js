@@ -1,12 +1,13 @@
 // App.js
-import React from 'react';
-import { Provider } from 'react-redux';
+import React, { useEffect } from 'react';
+import { Provider, useDispatch } from 'react-redux';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import store from './src/store/store';
-import { useSelector } from 'react-redux'; // Ensure this is only imported once
+import { useSelector } from 'react-redux';
+import { fetchOrdersAfterLogin } from './src/features/AuthSlice';
 
 // Importing screens
 import SplashScreen from './src/screens/SplashScreen';
@@ -36,9 +37,16 @@ function ProductsNavigator() {
 
 // Bottom Tab Navigator
 function MyTabs() {
+  const dispatch = useDispatch();
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const orders = useSelector((state) => state.orders);
-  console.log('Orders state in MyTabs:', orders); // Log orders state
+  const user = useSelector((state) => state.auth.user);
+
+  useEffect(() => {
+    if (user) {
+      dispatch(fetchOrdersAfterLogin(user));
+    }
+  }, [user, dispatch]);
 
   return (
     <Tab.Navigator

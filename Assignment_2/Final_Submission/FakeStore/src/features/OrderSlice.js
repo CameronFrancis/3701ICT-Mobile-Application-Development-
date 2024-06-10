@@ -1,16 +1,64 @@
 // src/features/OrderSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { fetchWithToken } from '../api/apiUtils';
 
-export const fetchOrders = createAsyncThunk('orders/fetchOrders', async (token) => {
-  const response = await fetch('http://192.168.1.205:3000/orders/all', {
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
-  });
-  const data = await response.json();
-  console.log('Fetched Orders:', data.orders); // Log fetched orders
-  return data.orders;
-});
+export const fetchOrders = createAsyncThunk(
+  'orders/fetchOrders',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await fetchWithToken('http://192.168.1.205:3000/orders/all', token);
+      const text = await response.text();
+      console.log('API response text:', text); // Log the raw response text
+      try {
+        const data = JSON.parse(text);
+        if (response.ok) {
+          return data.orders; // Ensure to return orders array
+        } else {
+          return rejectWithValue(data);
+        }
+      } catch (jsonError) {
+        console.error('JSON parse error:', jsonError.message);
+        return rejectWithValue(`JSON Parse error: ${jsonError.message}`);
+      }
+    } catch (error) {
+      console.error('Fetch error:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  'orders/updateOrderStatus',
+  async ({ orderId, isPaid, isDelivered }, { getState, rejectWithValue }) => {
+    const token = getState().auth.user.token;
+    try {
+      const response = await fetchWithToken('http://192.168.1.205:3000/orders/updateorder', token, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ orderID: orderId, isPaid, isDelivered }),
+      });
+
+      const text = await response.text();
+      console.log('Update order response text:', text); // Log the response text
+      try {
+        const data = JSON.parse(text);
+        if (response.ok) {
+          return { orderId, isPaid, isDelivered };
+        } else {
+          return rejectWithValue(data);
+        }
+      } catch (jsonError) {
+        console.error('JSON parse error:', jsonError.message);
+        return rejectWithValue(`JSON Parse error: ${jsonError.message}`);
+      }
+    } catch (error) {
+      console.error('Failed to update order:', error.message);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 
 const orderSlice = createSlice({
   name: 'orders',
@@ -18,50 +66,51 @@ const orderSlice = createSlice({
     new: [],
     paid: [],
     delivered: [],
+    status: 'idle',
+    error: null,
   },
   reducers: {
-    updateOrderStatus: (state, action) => {
-      const { orderId, isPaid, isDelivered } = action.payload;
-      for (const status in state) {
-        const index = state[status].findIndex(order => order.id === orderId);
-        if (index !== -1) {
-          const updatedOrder = { ...state[status][index] };
-          if (isPaid !== undefined) updatedOrder.is_paid = isPaid;
-          if (isDelivered !== undefined) updatedOrder.is_delivered = isDelivered;
-
-          state[status].splice(index, 1);
-
-          if (updatedOrder.is_delivered) {
-            state.delivered.push(updatedOrder);
-          } else if (updatedOrder.is_paid) {
-            state.paid.push(updatedOrder);
-          } else {
-            state.new.push(updatedOrder);
-          }
-
-          break;
-        }
-      }
-      console.log('Updated Order Status:', state); // Log state after updating order status
+    clearOrders: (state) => {
+      state.new = [];
+      state.paid = [];
+      state.delivered = [];
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchOrders.fulfilled, (state, action) => {
-      console.log('Orders fetched successfully:', action.payload);
-      state.new = action.payload.filter(order => !order.is_paid);
-      state.paid = action.payload.filter(order => order.is_paid && !order.is_delivered);
-      state.delivered = action.payload.filter(order => order.is_delivered);
-      console.log('Orders categorized:', state); // Log categorized orders
-    });
-    builder.addCase(fetchOrders.pending, () => {
-      console.log('Fetching orders...');
-    });
-    builder.addCase(fetchOrders.rejected, (state, action) => {
-      console.error('Failed to fetch orders:', action.error.message);
-    });
+    builder
+      .addCase(fetchOrders.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.status = 'succeeded';
+        state.new = action.payload.filter(order => !order.is_paid && !order.is_delivered);
+        state.paid = action.payload.filter(order => order.is_paid && !order.is_delivered);
+        state.delivered = action.payload.filter(order => order.is_paid && order.is_delivered);
+      })
+      .addCase(fetchOrders.rejected, (state, action) => {
+        state.status = 'failed';
+        state.error = action.payload;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        const { orderId, isPaid, isDelivered } = action.payload;
+        let orderToUpdate;
+
+        if (isPaid && !isDelivered) {
+          orderToUpdate = state.new.find(order => order.id === orderId);
+          if (orderToUpdate) {
+            state.new = state.new.filter(order => order.id !== orderId);
+            state.paid.push({ ...orderToUpdate, is_paid: true });
+          }
+        } else if (isPaid && isDelivered) {
+          orderToUpdate = state.paid.find(order => order.id === orderId);
+          if (orderToUpdate) {
+            state.paid = state.paid.filter(order => order.id !== orderId);
+            state.delivered.push({ ...orderToUpdate, is_delivered: true });
+          }
+        }
+      });
   },
 });
 
-export const { updateOrderStatus } = orderSlice.actions;
-
+export const { clearOrders } = orderSlice.actions;
 export default orderSlice.reducer;

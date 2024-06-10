@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button, Alert, Image } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, StyleSheet, Button, Alert, Modal } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
 import { fetchOrders, updateOrderStatus } from '../features/OrderSlice';
@@ -8,27 +8,13 @@ const MyOrdersScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const user = useSelector(state => state.auth.user);
   const orders = useSelector(state => state.orders);
-  const [expandedOrderIds, setExpandedOrderIds] = useState([]); // Ensure this is an array
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
   useEffect(() => {
-    console.log('User in MyOrdersScreen:', user);
     if (user) {
       dispatch(fetchOrders(user.token));
     }
   }, [dispatch, user]);
-
-  useEffect(() => {
-    console.log('Orders state:', orders);
-  }, [orders]);
-
-  const handleToggleExpand = (orderId) => {
-    setExpandedOrderIds(prev =>
-      prev.includes(orderId)
-        ? prev.filter(id => id !== orderId)
-        : [...prev, orderId]
-    );
-    console.log('Toggled expansion:', expandedOrderIds);
-  };
 
   const handleUpdateOrder = async (orderId, isPaid, isDelivered) => {
     try {
@@ -41,72 +27,71 @@ const MyOrdersScreen = ({ navigation }) => {
         body: JSON.stringify({ orderID: orderId, isPaid, isDelivered }),
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        dispatch(updateOrderStatus({ orderId, isPaid, isDelivered }));
-        Alert.alert('Success', `Order ${isPaid ? 'paid' : 'delivered'} successfully`);
-      } else {
-        Alert.alert('Error', data.message || 'Failed to update order');
+      const text = await response.text();
+      console.log('Update order response text:', text); // Log the response text
+      try {
+        const data = JSON.parse(text);
+        if (response.ok) {
+          dispatch(updateOrderStatus({ orderId, isPaid, isDelivered }));
+          Alert.alert('Success', `Order ${isPaid ? 'paid' : 'delivered'} successfully`);
+          dispatch(fetchOrders(user.token)); // Refetch orders after updating
+          setSelectedOrder(null); // Close modal after update
+        } else {
+          Alert.alert('Error', data.message || 'Failed to update order');
+        }
+      } catch (jsonError) {
+        console.error('JSON parse error:', jsonError.message);
+        Alert.alert('Error', `JSON parse error: ${jsonError.message}`);
       }
     } catch (error) {
-      console.error('Failed to update order:', error);
+      console.error('Failed to update order:', error.message);
       Alert.alert('Error', 'Failed to update order');
     }
   };
 
   const renderOrderItem = ({ item }) => (
-    <View style={styles.orderItem}>
-      <TouchableOpacity onPress={() => handleToggleExpand(item.id)}>
-        <Text>Order ID: {item.id}</Text>
-        <Text>Items: {item.item_numbers}</Text>
-        <Text>Total: ${item.total_price.toFixed(2)}</Text>
-        <Ionicons
-          name={expandedOrderIds.includes(item.id) ? 'caret-up' : 'caret-down'}
-          size={24}
-          color="black"
-        />
-      </TouchableOpacity>
-      {expandedOrderIds.includes(item.id) && (
-        <>
-          <FlatList
-            data={JSON.parse(item.order_items)}
-            renderItem={({ item }) => (
-              <View style={styles.productItem}>
-                <Image source={{ uri: item.image }} style={styles.image} />
-                <Text>{item.title} x{item.quantity}</Text>
-              </View>
-            )}
-            keyExtractor={(item, index) => index.toString()}
-          />
-          {!item.is_paid && (
-            <Button title="Pay" onPress={() => handleUpdateOrder(item.id, true, item.is_delivered)} />
-          )}
-          {item.is_paid && !item.is_delivered && (
-            <Button title="Receive" onPress={() => handleUpdateOrder(item.id, item.is_paid, true)} />
-          )}
-        </>
-      )}
-    </View>
+    <TouchableOpacity style={styles.orderItem} onPress={() => setSelectedOrder(item)}>
+      <Text>Order ID: {item.id}</Text>
+      <Text>Items: {item.item_numbers}</Text>
+      <Text>Total: ${(item.total_price / 100).toFixed(2)}</Text>
+      <Ionicons name="caret-forward" size={24} color="black" />
+    </TouchableOpacity>
   );
+
+  const renderModalContent = () => {
+    if (!selectedOrder) return null;
+
+    return (
+      <View style={styles.modalContent}>
+        <Text style={styles.modalTitle}>Order ID: {selectedOrder.id}</Text>
+        {!selectedOrder.is_paid && (
+          <Button title="Pay" onPress={() => handleUpdateOrder(selectedOrder.id, true, selectedOrder.is_delivered)} />
+        )}
+        {selectedOrder.is_paid && !selectedOrder.is_delivered && (
+          <Button title="Receive" onPress={() => handleUpdateOrder(selectedOrder.id, selectedOrder.is_paid, true)} />
+        )}
+        <Button title="Close" onPress={() => setSelectedOrder(null)} />
+      </View>
+    );
+  };
 
   return (
     <View style={styles.container}>
-      {['new', 'paid', 'delivered'].map(status => (
-        <View key={status}>
-          <TouchableOpacity style={styles.header} onPress={() => handleToggleExpand(status)}>
-            <Text style={styles.headerText}>{status.charAt(0).toUpperCase() + status.slice(1)} Orders ({orders[status]?.length ?? 0})</Text>
-            <Ionicons name={expandedOrderIds.includes(status) ? 'caret-up' : 'caret-down'} size={24} color="black" />
-          </TouchableOpacity>
-          {expandedOrderIds.includes(status) && (
-            <FlatList
-              data={orders[status]}
-              renderItem={renderOrderItem}
-              keyExtractor={item => item.id.toString()}
-            />
-          )}
+      {['new', 'paid', 'delivered'].map(category => (
+        <View key={category}>
+          <Text style={styles.headerText}>{category.charAt(0).toUpperCase() + category.slice(1)} Orders</Text>
+          <FlatList
+            data={orders[category]}
+            renderItem={renderOrderItem}
+            keyExtractor={item => item.id.toString()}
+          />
         </View>
       ))}
+      <Modal visible={!!selectedOrder} animationType="slide">
+        <View style={styles.modalContainer}>
+          {renderModalContent()}
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -116,32 +101,35 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 20,
   },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#ccc',
-  },
   headerText: {
     fontSize: 18,
     fontWeight: 'bold',
+    marginVertical: 10,
   },
   orderItem: {
     padding: 10,
     borderBottomWidth: 1,
     borderBottomColor: '#ddd',
-  },
-  productItem: {
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginVertical: 5,
   },
-  image: {
-    width: 40,
-    height: 40,
-    marginRight: 10,
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 10,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    marginBottom: 20,
   },
 });
 
